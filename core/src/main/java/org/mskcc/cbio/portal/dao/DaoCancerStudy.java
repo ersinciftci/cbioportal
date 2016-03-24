@@ -48,6 +48,7 @@ import java.text.*;
  *
  * @author Ethan Cerami
  * @author Arthur Goldberg goldberg@cbio.mskcc.org
+ * @author Ersin Ciftci
  */
 public final class DaoCancerStudy {
 
@@ -115,6 +116,19 @@ public final class DaoCancerStudy {
 		cacheDateByInternalId.put(study.getInternalId(), importDate);
         byStableId.put(study.getCancerStudyStableId(), study);
         byInternalId.put(study.getInternalId(), study);
+    }
+
+    /**
+     * Removes the cancer study from cache
+     * @param internalCancerStudyId Internal cancer study ID
+     */
+    private static void removeCancerStudyFromCache(int internalCancerStudyId) {
+
+        String stableId = byInternalId.get(internalCancerStudyId).getCancerStudyStableId();
+        cacheDateByStableId.remove(stableId);
+        cacheDateByInternalId.remove(internalCancerStudyId);
+        byStableId.remove(stableId);
+        byInternalId.remove(internalCancerStudyId);
     }
     
 	public static void setStatus(Status status, String stableCancerStudyId, Integer ... internalId) throws DaoException
@@ -344,6 +358,8 @@ public final class DaoCancerStudy {
                 int autoId = rs.getInt(1);
                 cancerStudy.setInternalId(autoId);
             }
+            
+            cacheCancerStudy(cancerStudy, new java.util.Date());
         } catch (SQLException e) {
             throw new DaoException(e);
         } finally {
@@ -427,8 +443,10 @@ public final class DaoCancerStudy {
         ResultSet rs = null;
         try {
             con = JdbcUtil.getDbConnection(DaoCancerStudy.class);
+            JdbcUtil.disableForeignKeyCheck(con);
             pstmt = con.prepareStatement("TRUNCATE TABLE cancer_study");
             pstmt.executeUpdate();
+            JdbcUtil.enableForeignKeyCheck(con);
         } catch (SQLException e) {
             throw new DaoException(e);
         } finally {
@@ -517,6 +535,8 @@ public final class DaoCancerStudy {
                 }
                 pstmt.executeUpdate();
             }
+            
+            removeCancerStudyFromCache(internalCancerStudyId);
         } catch (SQLException e) {
             throw new DaoException(e);
         } finally {
