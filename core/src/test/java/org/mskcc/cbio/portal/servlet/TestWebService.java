@@ -44,6 +44,7 @@ import org.junit.runner.RunWith;
 import org.mskcc.cbio.portal.dao.*;
 import org.mskcc.cbio.portal.model.*;
 import org.mskcc.cbio.portal.util.*;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
@@ -83,7 +84,9 @@ public class TestWebService {
 	   AccessControl control = createMock(AccessControl.class);
 	   List<CancerStudy> mockTrue = new ArrayList<CancerStudy>();
 	   mockTrue.add(null);
+       UserDetails mockUserDetails = createMock(UserDetails.class);
 	   expect(control.isAccessibleCancerStudy(isA(String.class))).andStubReturn(mockTrue);
+       expect(control.getUserDetails()).andStubReturn(mockUserDetails);
        replay(control);
        SpringUtil.setAccessControl(control);
    }

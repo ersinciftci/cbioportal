@@ -66,8 +66,6 @@ public class TestDaoCancerStudy {
 	@Test
     public void testDaoCancerStudy() throws DaoException, IOException {
 
-        DaoCancerStudy.deleteAllRecords();
-
 		assertEquals("breast,breast invasive", DaoTypeOfCancer.getTypeOfCancerById("BRCA").getClinicalTrialKeywords());
 
         CancerStudy cancerStudy = new CancerStudy("GBM", "GBM Description", "gbm", "brca", false);
@@ -87,21 +85,19 @@ public class TestDaoCancerStudy {
         assertEquals("GBM", cancerStudy.getName());
         assertEquals("Glioblastoma", cancerStudy.getDescription());
 
-        cancerStudy.setName("Breast");
-        cancerStudy.setCancerStudyStablId("breast");
-        cancerStudy.setDescription("Breast Description");
-        DaoCancerStudy.addCancerStudy(cancerStudy);
+        CancerStudy cancerStudy2 = new CancerStudy("Breast", "Breast Description", "breast", "brca", false);
+        DaoCancerStudy.addCancerStudy(cancerStudy2);
         
         // Removed testing that depends on internal ids
         // assertEquals(3, cancerStudy.getInternalId());
-        int testInternalId = cancerStudy.getInternalId();
+        int testInternalId = cancerStudy2.getInternalId();
 
-        cancerStudy = DaoCancerStudy.getCancerStudyByInternalId(testInternalId);
-        assertEquals("Breast Description", cancerStudy.getDescription());
-        assertEquals("Breast", cancerStudy.getName());
+        cancerStudy2 = DaoCancerStudy.getCancerStudyByInternalId(testInternalId);
+        assertEquals("Breast Description", cancerStudy2.getDescription());
+        assertEquals("Breast", cancerStudy2.getName());
 
         ArrayList<CancerStudy> list = DaoCancerStudy.getAllCancerStudies();
-        assertEquals(2, list.size());
+        assertEquals(3, list.size());
 
         assertEquals(null, DaoCancerStudy.getCancerStudyByStableId("no such study"));
         assertTrue(DaoCancerStudy.doesCancerStudyExistByStableId
@@ -111,6 +107,12 @@ public class TestDaoCancerStudy {
         assertTrue(DaoCancerStudy.doesCancerStudyExistByInternalId(cancerStudy.getInternalId()));
         assertFalse(DaoCancerStudy.doesCancerStudyExistByInternalId(-1));
 
+        DaoCancerStudy.deleteCancerStudy(cancerStudy2.getInternalId());
+
+        list = DaoCancerStudy.getAllCancerStudies();
+        assertEquals(2, list.size());
+
+        cancerStudy = DaoCancerStudy.getCancerStudyByStableId("gbm");
         DaoCancerStudy.deleteCancerStudy(cancerStudy.getInternalId());
 
         list = DaoCancerStudy.getAllCancerStudies();
@@ -125,8 +127,6 @@ public class TestDaoCancerStudy {
 	@Test
     public void testDaoCancerStudy2() throws DaoException, IOException {
 
-        DaoCancerStudy.deleteAllRecords();
-
         CancerStudy cancerStudy1 = new CancerStudy("GBM public study x", "GBM Description",
                 "tcga_gbm1", "brca", true);
         DaoCancerStudy.addCancerStudy(cancerStudy1);
@@ -140,7 +140,7 @@ public class TestDaoCancerStudy {
         DaoCancerStudy.addCancerStudy(cancerStudy3);
 
         ArrayList<CancerStudy> list = DaoCancerStudy.getAllCancerStudies();
-        assertEquals(3, list.size());
+        assertEquals(4, list.size());
         
         int cancerStudy1Id = cancerStudy1.getInternalId();
         int cancerStudy2Id = cancerStudy2.getInternalId();
@@ -167,26 +167,12 @@ public class TestDaoCancerStudy {
         assertEquals("Breast Description", readCancerStudy3.getDescription());
         assertEquals(false, readCancerStudy3.isPublicStudy());
 
-        assertEquals(3, DaoCancerStudy.getCount());
+        assertEquals(4, DaoCancerStudy.getCount());
         DaoCancerStudy.deleteCancerStudy(readCancerStudy1.getInternalId());
-        assertEquals(2, DaoCancerStudy.getCount());
+        assertEquals(3, DaoCancerStudy.getCount());
         DaoCancerStudy.deleteCancerStudy(readCancerStudy2.getInternalId());
+        assertEquals(2, DaoCancerStudy.getCount());
+        DaoCancerStudy.deleteCancerStudy(readCancerStudy3.getInternalId());
         assertEquals(1, DaoCancerStudy.getCount());
 	}
-	
-    // Deleting all cancer studies is now a wee bit more complicated. It's transactional. 
-    // A lot depends on it, and its API should not be exposed all that easily.
-    
-	@Test
-	public void testDeleteAllRecords() throws DaoException, IOException {
-
-        CancerStudy cancerStudy1 = new CancerStudy("GBM public study x", "GBM Description",
-            "tcga_gbm1", "brca", true);
-        DaoCancerStudy.addCancerStudy(cancerStudy1);
-        
-        DaoCancerStudy.deleteAllRecords();
-        
-        assertEquals(0, DaoCancerStudy.getCount());
-        assertEquals(null, DaoCancerStudy.getCancerStudyByInternalId(CancerStudy.NO_SUCH_STUDY));
-    }
 }
