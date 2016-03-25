@@ -344,7 +344,6 @@
 		  <configuration>
 			<forkMode>always</forkMode>
 			<filtering>true</filtering>
-			<testFailureIgnore>true</testFailureIgnore>
 			<systemProperties>
 			  <property>
 				<name>log4j.configuration</name>
@@ -383,8 +382,9 @@
 				<sqlCommand>SET storage_engine=INNODB</sqlCommand>
 				<sqlCommand>SET SESSION sql_mode = 'ANSI_QUOTES'</sqlCommand>
 				<srcFiles>
-				  <srcFile>src/main/resources/db/cgds.sql</srcFile>
-				  <srcFile>src/test/resources/seed_mini.sql</srcFile>
+                    <srcFile>src/main/resources/db/cgds.sql</srcFile>
+                    <srcFile>src/test/resources/seed_mini.sql</srcFile>
+                    <srcFile>src/test/resources/panCancerStudySummary/seed_mini_pancancer.sql</srcFile>
 				</srcFiles>
 				<!-- added encoding to prevent Unknown initial character set index '192' received from server error -->
 				<encoding>UTF-8</encoding>

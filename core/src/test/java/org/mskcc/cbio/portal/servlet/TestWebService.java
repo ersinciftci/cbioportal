@@ -72,24 +72,24 @@ public class TestWebService {
    private GeneticProfile publicGeneticProfile;
    
    private AccessControl oldAccessControl;
-   
-   @Before
-   public void setUp() throws DaoException {
-	   oldAccessControl = SpringUtil.getAccessControl();
-	   
-	   // This is truly awful, but basically mocks the access control. The API for 
-	   // isAccessibleCancerStudy is a bit silly, as it's intended to be boolean
-	   // but is really a list. So we mock with a non-empty list with a null in it. 
 
-	   AccessControl control = createMock(AccessControl.class);
-	   List<CancerStudy> mockTrue = new ArrayList<CancerStudy>();
-	   mockTrue.add(null);
-       UserDetails mockUserDetails = createMock(UserDetails.class);
-	   expect(control.isAccessibleCancerStudy(isA(String.class))).andStubReturn(mockTrue);
-       expect(control.getUserDetails()).andStubReturn(mockUserDetails);
-       replay(control);
-       SpringUtil.setAccessControl(control);
-   }
+    @Before
+    public void setUp() throws DaoException {
+        oldAccessControl = SpringUtil.getAccessControl();
+
+        // This is truly awful, but basically mocks the access control. The API for 
+        // isAccessibleCancerStudy is a bit silly, as it's intended to be boolean
+        // but is really a list. So we mock with a non-empty list with a null in it. 
+
+        AccessControl control = createMock(AccessControl.class);
+        List<CancerStudy> mockTrue = new ArrayList<CancerStudy>();
+        mockTrue.add(null);
+        UserDetails mockUserDetails = createMock(UserDetails.class);
+        expect(control.isAccessibleCancerStudy(isA(String.class))).andStubReturn(mockTrue);
+        expect(control.getUserDetails()).andStubReturn(mockUserDetails);
+        replay(control);
+        SpringUtil.setAccessControl(control);
+    }
    
    @After
    public void tearDown() {
