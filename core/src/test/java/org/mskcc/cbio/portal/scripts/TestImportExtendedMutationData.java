@@ -93,7 +93,7 @@ public class TestImportExtendedMutationData {
         MySQLbulkLoader.bulkLoadOn();
         
 		// TBD: change this to use getResourceAsStream()
-        File file = new File("target/test-classes/data_mutations_extended.txt");
+        File file = new File("src/test/resources/data_mutations_extended.txt");
         
         exception.expect(IllegalArgumentException.class);
         exception.expectMessage(containsString("Gene list 'no_such_germline_whitelistfile' not found"));
@@ -102,13 +102,12 @@ public class TestImportExtendedMutationData {
 	}
 	
 	@Test
-	@Ignore("To be fixed")
     public void testImportExtendedMutationDataExtended() throws IOException, DaoException {
 		
         MySQLbulkLoader.bulkLoadOn();
         
 		// TBD: change this to use getResourceAsStream()
-        File file = new File("target/test-classes/data_mutations_extended.txt");
+        File file = new File("src/test/resources/data_mutations_extended.txt");
         ImportExtendedMutationData parser = new ImportExtendedMutationData(file, geneticProfileId);
         parser.importData();
         MySQLbulkLoader.flushAll();
@@ -123,14 +122,13 @@ public class TestImportExtendedMutationData {
 	}
     
 	@Test
-	@Ignore("To be fixed")
     public void testImportExtendedMutationDataWhitelisted() throws IOException, DaoException {
 
         MySQLbulkLoader.bulkLoadOn();
 
 		// TBD: change this to use getResourceAsStream()
-        File file = new File("target/test-classes/data_mutations_extended.txt");
-        ImportExtendedMutationData parser = new ImportExtendedMutationData(file, geneticProfileId, "target/test-classes/test_germline_white_list_file2.txt");
+        File file = new File("src/test/resources/data_mutations_extended.txt");
+        ImportExtendedMutationData parser = new ImportExtendedMutationData(file, geneticProfileId, "src/test/resources/test_germline_white_list_file2.txt");
         // put on: CLEC7A
         parser.importData();
         MySQLbulkLoader.flushAll();
@@ -141,16 +139,15 @@ public class TestImportExtendedMutationData {
 	}
 	
 	@Test
-	@Ignore("To be fixed")
     public void testImportExtendedMutationDataWhitelisted2() throws IOException, DaoException {
 
         MySQLbulkLoader.bulkLoadOn();
 
 		// TBD: change this to use getResourceAsStream()
-        File file = new File("target/test-classes/data_mutations_extended.txt");
+        File file = new File("src/test/resources/data_mutations_extended.txt");
 
 		// TBD: change this to use getResourceAsStream()
-        ImportExtendedMutationData parser = new ImportExtendedMutationData(file, geneticProfileId, "target/test-classes/test_germline_white_list_file2.txt");
+        ImportExtendedMutationData parser = new ImportExtendedMutationData(file, geneticProfileId, "src/test/resources/test_germline_white_list_file2.txt");
         parser.importData();
         MySQLbulkLoader.flushAll();
 
@@ -164,16 +161,15 @@ public class TestImportExtendedMutationData {
 
 	
 	@Test
-	@Ignore("To be fixed")
     public void testImportExtendedMutationDataWhitelisted3() throws IOException, DaoException {
 
         MySQLbulkLoader.bulkLoadOn();
 
 		// TBD: change this to use getResourceAsStream()
-        File file = new File("target/test-classes/data_mutations_extended.txt");
+        File file = new File("src/test/resources/data_mutations_extended.txt");
 
 		// TBD: change this to use getResourceAsStream()
-        ImportExtendedMutationData parser = new ImportExtendedMutationData(file, geneticProfileId, "target/test-classes/test_germline_white_list_file2.txt");
+        ImportExtendedMutationData parser = new ImportExtendedMutationData(file, geneticProfileId, "src/test/resources/test_germline_white_list_file2.txt");
         parser.importData();
         MySQLbulkLoader.flushAll();
         
@@ -195,7 +191,7 @@ public class TestImportExtendedMutationData {
 	 */
 	@Test
     public void testImportExtendedMutationDataOncotated() throws IOException, DaoException {
-        File file = new File("target/test-classes/data_mutations_oncotated.txt");
+        File file = new File("src/test/resources/data_mutations_oncotated.txt");
         ImportExtendedMutationData parser = new ImportExtendedMutationData(file, geneticProfileId);
         parser.importData();
         MySQLbulkLoader.flushAll();
