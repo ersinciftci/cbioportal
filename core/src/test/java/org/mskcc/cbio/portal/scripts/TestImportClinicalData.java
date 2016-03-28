@@ -56,6 +56,7 @@ import java.util.*;
  * Tests Import of Clinical Data.
  *
  * @author Ethan Cerami.
+ * @author Ersin Ciftci
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/applicationContext-dao.xml" })
@@ -82,11 +83,10 @@ public class TestImportClinicalData {
      * @throws IOException  IO Error.
      */
 	@Test
-	@Ignore("To be fixed")
     public void testImportClinicalData() throws Exception {
 
 		// TBD: change this to use getResourceAsStream()
-        File clinicalFile = new File("target/test-classes/clinical_data.txt");
+        File clinicalFile = new File("src/test/resources/clinical_data.txt");
         ImportClinicalData importClinicalData = new ImportClinicalData(study, clinicalFile);
         importClinicalData.importData();
 	}
@@ -98,18 +98,17 @@ public class TestImportClinicalData {
      * @throws IOException  IO Error.
      */
 	@Test
-	@Ignore("To be fixed")
     public void testImportClinicalDataSurvival() throws Exception {
 
 		// TBD: change this to use getResourceAsStream()
-        File clinicalFile = new File("target/test-classes/clinical_data.txt");
+        File clinicalFile = new File("src/test/resources/clinical_data.txt");
         ImportClinicalData importClinicalData = new ImportClinicalData(study, clinicalFile);
         importClinicalData.importData();
 
         LinkedHashSet <String> caseSet = new LinkedHashSet<String>();
         caseSet.add("TCGA-A1-A0SB");
-        caseSet.add("TCGA-A1-A0SI");
         caseSet.add("TCGA-A1-A0SE");
+        caseSet.add("TCGA-A1-A0SI");
 
         List<Patient> clinicalCaseList = DaoClinicalData.getSurvivalData(study.getInternalId(), caseSet);
         assertEquals (3, clinicalCaseList.size());
@@ -121,15 +120,15 @@ public class TestImportClinicalData {
         assertEquals (new Double(43.8), clinical0.getOverallSurvivalMonths());
         assertEquals (new Double(15.05), clinical0.getDiseaseFreeSurvivalMonths());
 
-        Patient clinical1 = clinicalCaseList.get(1);
-        assertEquals (new Double(55.53), clinical1.getAgeAtDiagnosis());
-        assertEquals ("LIVING", clinical1.getOverallSurvivalStatus());
-        assertEquals ("DiseaseFree", clinical1.getDiseaseFreeSurvivalStatus());
-        assertEquals (new Double(49.02), clinical1.getOverallSurvivalMonths());
-        assertEquals (new Double(49.02), clinical1.getDiseaseFreeSurvivalMonths());
-
         Patient clinical2 = clinicalCaseList.get(2);
-        assertEquals (null, clinical2.getDiseaseFreeSurvivalMonths());
+        assertEquals (new Double(55.53), clinical2.getAgeAtDiagnosis());
+        assertEquals ("LIVING", clinical2.getOverallSurvivalStatus());
+        assertEquals ("DiseaseFree", clinical2.getDiseaseFreeSurvivalStatus());
+        assertEquals (new Double(49.02), clinical2.getOverallSurvivalMonths());
+        assertEquals (new Double(49.02), clinical2.getDiseaseFreeSurvivalMonths());
+
+        Patient clinical1 = clinicalCaseList.get(1);
+        assertEquals (null, clinical1.getDiseaseFreeSurvivalMonths());
         
 	}
 	
@@ -140,11 +139,10 @@ public class TestImportClinicalData {
      * @throws IOException  IO Error.
      */
 	@Test
-	@Ignore("To be fixed")
     public void testImportClinicalDataSlice() throws Exception {
 
 		// TBD: change this to use getResourceAsStream()
-        File clinicalFile = new File("target/test-classes/clinical_data.txt");
+        File clinicalFile = new File("src/test/resources/clinical_data.txt");
         ImportClinicalData importClinicalData = new ImportClinicalData(study, clinicalFile);
         importClinicalData.importData();
 
@@ -153,9 +151,9 @@ public class TestImportClinicalData {
         
 		ClinicalParameterMap paramMap = slice.get(0);
 		assertEquals ("PLATINUMSTATUS", paramMap.getName());
-		assertEquals("Sensitive", paramMap.getValue("TCGA-A1-A0SD"));
+		assertEquals("Sensitive", paramMap.getValue("TCGA-A1-A0SB"));
         assertEquals("NA", paramMap.getValue("TCGA-A1-A0SE"));
-        assertEquals(2, paramMap.getDistinctCategories().size());
+        assertEquals(3, paramMap.getDistinctCategories().size());
 	}
 	
     /**
@@ -165,11 +163,10 @@ public class TestImportClinicalData {
      * @throws IOException  IO Error.
      */
 	@Test
-	@Ignore("To be fixed")
     public void testImportClinicalDataParameters() throws Exception {
 
 		// TBD: change this to use getResourceAsStream()
-        File clinicalFile = new File("target/test-classes/clinical_data.txt");
+        File clinicalFile = new File("src/test/resources/clinical_data.txt");
         ImportClinicalData importClinicalData = new ImportClinicalData(study, clinicalFile);
         importClinicalData.importData();
 
